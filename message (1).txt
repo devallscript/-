@@ -1,0 +1,239 @@
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+
+local Window = WindUI:CreateWindow({
+    Title = "admin-cmds",
+    Icon = "door-open",
+    Author = "Sys Team",
+    Folder = "admfloher",
+    Size = UDim2.fromOffset(440, 360),
+    Transparent = true,
+    Theme = "Dark",
+    SideBarWidth = 190,
+    Background = "",
+    BackgroundImageTransparency = 0.42,
+    HideSearchBar = true,
+    ScrollBarEnabled = false,
+    User = {
+        Enabled = true,
+        Anonymous = false,
+        Callback = function()
+            print("clicked")
+        end,
+    },
+})
+
+
+local Tab = Window:Tab({
+    Title = "ALL",
+    Icon = "menu",
+    Locked = false,
+})
+
+
+local Section = Tab:Section({ 
+    Title = "Comandos em massa",
+    TextXAlignment = "Left",
+    TextSize = 10,
+})
+
+-- Botões de comandos em massa
+local comandosAll = {
+    {Titulo = "Bring All", Comando = "bring all"},
+    {Titulo = "Kill All", Comando = "kill all"},
+    {Titulo = "Kick All", Comando = "kick all"},
+    {Titulo = "Sit All", Comando = "sit all"},
+    {Titulo = "Lag All", Comando = "lag all"},
+    {Titulo = "Dance All", Comando = "dance all"},
+}
+
+for _, data in ipairs(comandosAll) do
+    Tab:Button({
+        Title = data.Titulo,
+        Desc = "Executa: ;" .. data.Comando,
+        Locked = false,
+        Callback = function()
+            local chat = game:GetService("TextChatService").TextChannels:FindFirstChild("RBXGeneral")
+            if chat then
+                chat:SendAsync(";" .. data.Comando)
+            end
+        end
+    })
+end
+
+local Tab = Window:Tab({
+    Title = "players cmd",
+    Icon = "skull",
+    Locked = false,
+})
+
+local Section = Tab:Section({ 
+    Title = "-SOMENTE AFETA A QUEM USA MEUS SCRIPT",
+    TextXAlignment = "Left",
+    TextSize = 15,
+})
+
+-- Variável para armazenar o alvo
+local jogadorAlvo = nil
+
+-- Busca por nome/displayname parcial
+local function buscarJogador(nome)
+    nome = nome:lower()
+    for _, p in ipairs(game.Players:GetPlayers()) do
+        if p.Name:lower():sub(1, #nome) == nome or p.DisplayName:lower():sub(1, #nome) == nome then
+            return p
+        end
+    end
+end
+
+-- Input para selecionar jogador
+Tab:Input({
+    Title = "Selecionar Alvo",
+    Desc = "Digite nome ou apelido do jogador",
+    Placeholder = "Ex: zMario",
+    InputIcon = "user",
+    Type = "Input",
+    Callback = function(txt)
+        local achado = buscarJogador(txt)
+        if achado then
+            jogadorAlvo = achado.Name
+            warn("Alvo selecionado: " .. jogadorAlvo)
+        else
+            jogadorAlvo = nil
+            warn("Jogador não encontrado")
+        end
+    end
+})
+
+-- Comandos direcionados ao jogador selecionado
+local Section = Tab:Section({
+    Title = "< Comandos TROLL >",
+    TextXAlignment = "Left",
+    TextSize = 11,
+})
+
+Tab:Button({
+    Title = "Show : usuarios",
+    Desc = "Verificar si ha um player user fala here",
+    Locked = false,
+    Callback = function()
+        local chat = game:GetService("TextChatService").TextChannels:FindFirstChild("RBXGeneral")
+        if chat then chat:SendAsync(";show") end
+    end
+})
+
+Tab:Button({
+    Title = "Show disfarçado",
+    Desc = "Verificar#",
+    Locked = false,
+    Callback = function()
+        local chat = game:GetService("TextChatService").TextChannels:FindFirstChild("RBXGeneral")
+        if chat then chat:SendAsync(".") end
+    end
+})
+
+local Section = Tab:Section({
+    Title = "< cmds >",
+    TextXAlignment = "Left",
+    TextSize = 11,
+})
+
+local comandosAlvo = {"kill", "fling", "nothing", "dance", "maid", "freeze", "unfreeze", "jail", "unjail", "bring", "sit", "kick", "lag"}
+
+for _, cmd in ipairs(comandosAlvo) do
+    Tab:Button({
+        Title = cmd,
+        Desc = "Executa ;" .. cmd .. " NOME",
+        Locked = false,
+        Callback = function()
+            if jogadorAlvo then
+                local chat = game:GetService("TextChatService").TextChannels:FindFirstChild("RBXGeneral")
+                if chat then
+                    chat:SendAsync(";" .. cmd .. " " .. jogadorAlvo)
+                end
+            else
+                warn("Nenhum jogador selecionado!")
+            end
+        end
+    })
+end
+
+Tab:Button({
+    Title = "MUNDO",
+    Desc = "[NEW] REFERENCE JOJO range",
+    Locked = false,
+    Callback = function()
+        local chat = game:GetService("TextChatService").TextChannels:FindFirstChild("RBXGeneral")
+        if chat then chat:SendAsync(";MUNDO") end
+    end
+})
+
+Tab:Button({
+    Title = "domain expansion",
+    Desc = "[NEW] REFERENCE Jujutiso Kaisen renge",
+    Locked = false,
+    Callback = function()
+        local chat = game:GetService("TextChatService").TextChannels:FindFirstChild("RBXGeneral")
+        if chat then chat:SendAsync(";domain expansion") end
+    end
+})
+
+local Tab = Window:Tab({
+    Title = "Tag",
+    Icon = "tag",
+    Locked = false,
+})
+
+Tab:Button({
+    Title = "Tag Moderador",
+    Desc = "Ativa a tag .•°tag°•.",
+    Locked = false,
+    Callback = function()
+        local chat = game:GetService("TextChatService").TextChannels:FindFirstChild("RBXGeneral")
+        if chat then chat:SendAsync(";tag") end
+    end
+})
+
+Tab:Button({
+    Title = "UnTag Moderador",
+    Desc = "Remove a tag",
+    Locked = false,
+    Callback = function()
+        local chat = game:GetService("TextChatService").TextChannels:FindFirstChild("RBXGeneral")
+        if chat then chat:SendAsync(";untag") end
+    end
+})
+
+local Tab = Window:Tab({
+    Title = "Say",
+    Icon = "message-circle",
+    Locked = false,
+})
+
+local textoDigitado = ""
+
+Tab:Input({
+    Title = "Mensagem",
+    Desc = "Digite algo para enviar",
+    Placeholder = "Texto que será falado...",
+    InputIcon = "message-square",
+    Type = "Input",
+    Callback = function(txt)
+        textoDigitado = txt
+    end
+})
+
+Tab:Button({
+    Title = "Enviar Mensagem",
+    Desc = "Fala como ;say",
+    Locked = false,
+    Callback = function()
+        if textoDigitado ~= "" then
+            local chat = game:GetService("TextChatService").TextChannels:FindFirstChild("RBXGeneral")
+            if chat then
+                chat:SendAsync(";say " .. textoDigitado)
+            end
+        else
+            warn("Digite algo para falar.")
+        end
+    end
+})
